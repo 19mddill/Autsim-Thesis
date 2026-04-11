@@ -92,21 +92,36 @@ We tried to contribute to this research thinking about it very much down to eart
 
 
 \subsection{Complex Engineering Analysis}
-Below are the complex engineering analysis:
 
-\subsubsection{Complex Engineering Problems}
+We tried to address the complex engineering problems first by exactly knowing what are the complex engineering problems applicable to this research. Below that attempt has been tried to fullfill.
 
-One of the most complex engineering problems that this research work aims to solve is the processing of unprocessed video data for the purpose of autism related behavioral pattern recognition. The reason why video based behavioral data is so complex is that it is extreme variable for the movement, posture, video conditions, and temporal inconsistency. The process of converting this raw visual data into meaningful numerical features for machine learning purposes is a complex task indeed.
+\textbf{P1: Depth of Knowledge} \\
+\textbf{K1 (Natural Science):} Undertanding the five repetitive patterns of human gestures that autism affected children make which are hand flapping, finger clipping, spining, head touching and tilting. \\
+\textbf{K2 (Mathematics):} Usage of ROC-AUC curves, precision, recall, f1 score and macro average scores related to statistics  \\
+\textbf{K3 (Engineering Fundamentals):} Preprocessing of the raw footages containing the five traits, feature extraction, sequence extraction, training models\\
+\textbf{K4 (Specialist Knowledge):} MediaPipe Pose, machine learning, BiLSTM, CNN-BiLSTM, and explainable AI. \\
+\textbf{K5 (Engineering Design):} Designing an automated pipeline from preprocess the raw footages to traing models with them and generating validated classification result.\\
+\textbf{K6 (Engineering Practice):}On field practical data collected from the exact affected children \\
+\textbf{K7 (Comprehension):} Realising ethical constraints, overfitting, paperworks, screening challanges. \\
+\textbf{K8 (Research Literature):} Utilizing recent researches in the field and finding gaps.
 
-Another complex problem that this research tries to solve is the modeling of the temporal behavior.Like, for Hand flapping or toe walking, which are autism-related behaviors, cannot be recognized from a single image rather they are recognized over a sequence of images.
-Moreover, the existence of class imbalance and small sample sizes for some behaviors adds to the engineering challenges. Such problems can result in biased learning of models and poor generalization, threfore requires certain learning strategies like data augmentating, class weighting and robust validation.
-\subsubsection{Complex Engineering Activities}
+\textbf{P2: Conflicting Technical Issues} \\
+Balancing training and validating accuracy and other metrics with the limited dataset which has class imbalance and variable pose qualities.
 
-To overcome the issues, an engineering pipeline was designed to combine computer vision and machine learning algorithms. MediaPipe Pose was used as a computer vision algorithm to indentify human body landmarks from video frames and it also represents visual behavior as structured pose data. This helps in the robustness to background noise and retains key behavioral information.
+\textbf{P3: Depth of Analysis} \\
+Since it is a classification task, the study not only validates accuracy but also ROC-AUC curve,precision, recall, f1 scores, macro average scores and also the confusion matrice.
 
-Both sequence based machine learning models and sequence based deep learning models were designed and tested. Traditional machine learning models were trained with statistical pose features, and a Bi-Directional LSTM network was designed to analyze temporal dependencies in pose sequences. The performance of the models was tested using stratified k-fold cross-validation, ROC-AUC curves and validation curves.
+\textbf{P4: Familiarity of Issues} \\
+The thesis tries to explore the less explored autism traits of children affected with it and combine the familiar deep learning and machine learning models for AI implication for assistive screening.
 
-Also, explainable artificial intelligence were also integrated to enhance the clarity and trustworthiness of the model decisions. SHAP based feature importance analysis was employed to determine the dominant upper body landmarks influencing the classification results. This type of interpretability aspect is becoming increasingly important in machine learning tasks related to the healthcare domain where transpart method is as important as accuracy \cite{rajpurkar2022ai}.
+\textbf{P5: Extent of Application} \\
+The propose thesis of ours can assist the researchers, special schools, clinics for primary screening of the suspected child.
+
+\textbf{P6: Involvement of Stakeholders} \\
+The application of this thesis involves children, parents, special school authorities, researchers and also the health care professionals.
+
+\textbf{P7: Interdependence} \\
+The thesis is a interdepended piple line of preprocessed data, AI models training and finally evaluating.
 
  
 \subsection{Thesis/Project Organization}
