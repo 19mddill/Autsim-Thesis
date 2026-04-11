@@ -1,0 +1,50 @@
+% ==============================
+% Chapter 5
+% ==============================
+
+\begin{center}
+    \section*{\fontsize{20}{20}\selectfont Chapter 5}
+\end{center}
+\vspace{10mm}
+
+\section{Standards, Constraints, and Milestones}
+
+This chapter will discuss the guidelines that we followed, the challenges that we faced, and the significant milestones that we tried to achieve in the development of our proposed pose based system for categorizing autism-related behavioral patterns. It will also discuss sustainability, the impact of the system on the larger population and society and the ethical responsibility that one has when working with health related information that involves the children. It will also outline the real-world challenges that the we faced in the application of the proposed system.
+
+% ==============================
+\subsection{Sustainability Standards}
+
+From an environmental perspective, it is a lightweight solution for computational requirements asit operates on short video clips of 1 to 4 seconds. This decreases storage and energy requirements during both training and inference phases. The modular software design also contributes to a more sustainable solution by allowing easy addition of new behavioral classes or changing models without having to rethink the whole solution of the system.
+
+% ==============================
+\subsection{Impacts on Society}
+
+Children, families, teachers, and health workers around the world can have someone who is affected by Autism Spectrum Disorder. The proposed system aims to support behavioral analysis in a child by providing a solution that is objective and automated, helping researchers in the field. It has the potential to aid educators and researchers in a timely manner, especially in environments that are resource poor.
+
+% ==============================
+\subsection{Ethics}
+
+The ethical side is of primary importance in the research, as it deals with video clips of children. All the information is treated confidentially and not revealed to the public to preserve the privacy of the participants. The system minimizes the storage of video clips, retaining only the necessary ones to reduce the chances of identification by using pose-based representations.
+
+% ==============================
+\subsection{Challenges}
+
+Our proposed system mainly works with six types of behaviour and they are hand flapping kind a like a bird, finger clipping, tilting, spinning and toe walking. Many affected children did this in front of our eyes and right then and there it was often not possible to capture those traits other wise we could have had more data. Also, there was a little challange of gaining the trust of the authorities and the parents but we made it. Also, this whole project is done on free resources available in the internet which is itself is a big challange.
+
+% ==============================
+\subsection{Constraints}
+
+\subsubsection{State of Art Algorithm Constraints}
+The thesis has merely close to 300 dataset for that models like ST-GCN(Spatial Temporal Graph Convolutional Network) and Optical Flow + MobileNetV2 did not perfom well.
+\subsubsection{Design Constraints}
+The system has to be effective with short video clips and should remain at all times. This means that long term temporal models or sensor data cannot be used.
+
+\subsubsection{Component Constraints}
+The framework depends on MediaPipe Pose for skeletal landmark extraction which hinders the system to the accuracy and limitations of this pose estimation model.
+
+\subsubsection{Budget Constraints}
+The project is done using freely available open-source software tools to minimize financial cost. No specialized hardware or commercial software licenses are required.
+
+\section*{Chapter Summary}
+
+In this chapter, the proposed classification systems standards, societal impacts, ethical considerations, challenges, constraints and milestones have been discussed. Keeping in mind the sustainability and ethical factors the proposed project has demonstrated how to apply machine learning and computer vision in a responsible and workable and also feasible way, keeping in mind the limitations in the real world.

@@ -1,0 +1,395 @@
+% ==============================
+% Chapter 4
+% ==============================
+
+\begin{center}
+    \section*{\fontsize{20}{20}\selectfont Chapter 4}
+\end{center}
+\vspace{10mm}
+
+\section{Implementation and Result Analysis}
+
+This chapter will try to elaborate on the implementation details and evaluation of the our proposed pose-based autism behavior classification framework. The analysis will be carried out by considering traditional machine learning and deep learning techniques on short video segments of 3-4 seconds in length. The key side of this chapter will be to understand and analyze the performance of the models on the preprocessed data and evaluate them on different parameters such as generalization, temporal modeling, and interpretability of results and aslo  traditional classification performance and existing approaches.
+
+% ==============================
+\subsection{Environment Setup}
+
+All the experiments are employed through Python-based Machine Learning and Deep Learning techniques. The pose extraction method is employed by MediaPipe Pose. The classical models are employed using the scikit-learn library and the Deep Learning models are employed by using the very popular TensorFlow and Keras. The code is written in the google colab with internal T4 GPU to support the processings and also the sequence based learning process which is really cruicial for the video based experiments like ours. For reproducibility, the random seeds and software versions were kept the same across all the experiments pre purposedly.
+
+
+% ==============================
+\subsection{Data Preprocessing}
+
+This step converts the raw behavioral videos into a more structured and numerical form that can be used for machine learning and deep learning models. The process begins from the extraction of frames from the videos and then followed by the extraction of pose landmarks and the normalization of the timing before starting the feature set.
+
+\subsubsection{Video Frame Extraction}
+
+The raw videos of the certain behaviors is broken down into frames using OpenCV. The videos got different resolutions, for this reason frames are resized to a fixed width while maintaining the aspect ratio.  
+
+\subsubsection{Pose Landmark Extraction}
+
+For each frame, the Human pose is extracted using the MediaPipe Pose library. The library has 33 key points on the body and they are the head, shoulders, elbows, wrists, hips, knees, ankles, and more. For each of these points, three values are recorded in the x and y coordinates as well as the visibility score on the confidence of the pose extraction.
+
+So,each frame is represented as 99 dimensional vector with each dimension to one of the 33 points on the body and the three values for each point. If the pose extraction for a frame fails, a zero vector will be used to maintain the sequence.
+
+\subsubsection{Temporal Sequence Normalization}
+The videos that we have collected have different lengths and different frames in each video. For this reason, we had to standardize all the pose sequences to a uniform length of 30 frames. We achieved this in the following way like if the sequence is lower than 30 frames, we jsut simply repeat the last detected frame until we reach our desired 30 frames. On the other hand, if the sequence is greater than 30 frames, we use the method even sampling to pick frames that are representing type of the entire range of the video.
+
+\subsubsection{Constructing Features for Classical Models}
+
+To use classic machine learning classifiers, we have transformed each pose sequence to a fixed-size feature vector. We have computed several statistical descriptors for each pose landmark coordinate and they are the mean, standard deviation, minimum, maximum respectively.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/data_preprocessing.png}
+\caption{Data Preprocessing Steps}
+\label{fig:Data Preprocessing}
+\end{figure}
+
+% ==============================
+\subsection{Feature Relationships}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/correlation_heatmap.png}
+\caption{Correlation heatmap of upper-body pose landmark features.}
+\label{fig:corr_upper}
+\end{figure}
+
+
+% ==============================
+\subsection{Model Implementation}
+
+We have used both classical machine learning model and deep learning model for our thesis as detailed below:
+
+\subsubsection{Machine Learning Models}
+A number of conventional machine learning architectures are implemented and they are Random Forest, Support Vector Machine, Logistic Regression, K-Nearest Neighbors, and Gradient Boosting respectively. These model architectures are trained on statistical features that have been learned from the pose data. In order to make the system more robust, ensemble methods with hard voting and soft voting have also been considered.
+
+\subsubsection{Deep Learning Model}
+To demonstrate the temporal dependencies properly, a Bi-Directional Long Short-Term Memory (BiLSTM) network has also been trained directly on the normalized pose sequences. The BiLSTM network views the sequences both forward and backward, thus allowing it to learn short repeating patterns very well which is very important for our thesis. To avoid overfitting in the model, dropout and early stopping are applied. Class weighting have also been used to remove class imbalance.
+Also later, BiGRU has been introduced for computational feasibility and less gating and CNN for combining one-dimensional convolutional layers with bidirectional LSTM layers.
+
+% ==============================
+\subsection{Evaluation Metrics}
+
+Performance metrics are calculated using standard multiclass metrics which are commonly announced as accuracy, precision, recall, and F1 score. Confusion matrices are used to gain further insight informations for the prediction split. Also, we compute One-vs-Rest ROC curves and the corresponding AUC values for the BiLSTM. When using conventional machine learning models, we relied on five-fold stratified cross-validation. Also,confusion matrix and ROC AUC curves have also been generated for these machine learning models too.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/f1.png}
+\caption{Formula of Precision, Recall, Accuracy, and F1 score}
+\label{fig:Formula of Precision, Recall, Accuracy, and F1 score}
+\end{figure}
+
+
+% ==============================
+\subsection{Performance Analysis}
+
+We have evaluated our project from two perspectives. The first one is from the view of traditional and classical machine learning models which work only features like 33 landmarks of human skeleton from media pose and the later is the deep learning model for exploiting the temporal dependency of frame to frame of pose sequences to accurately evaluate whether our work is generation results or not.
+
+\subsubsection{Traditional Models Performance Analysis}
+
+In the conventional models, we first implemented a five-fold cross-validation to assess the performance of the pose-based feature representation.
+
+The table below compares classical machine learning models using five-fold cross-validation. The table is showing the model, the mean accuracy and a remark about the model respectively.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of Classical Machine Learning Models using five fold cross validation}
+\label{tab:model comparison}
+\begin{tabular}{l c l}
+\hline
+\textbf{Model} & \textbf{Mean Accuracy} & \textbf{Remarks} \\
+\hline
+SVM (RBF) & 0.4868 & Poor fitting for pose-derived statistical features.\\
+KNN & 0.6777 & greatly sensitive to feature scaling and local distance patterns \\
+Logistic Regression & 0.7993 &Works as a linear decision boundary baseline. \\
+Soft Voting Ensemble & 0.8027 & Combines predictions from multiple classifiers by using probabilities. \\
+Random Forest & 0.8522 & Excellent ensemble model and uses decision trees. \\
+Gradient Boosting & 0.8587 & Sequentially boosts a weak learner. \\
+Hard Voting Ensemble & 0.8620 & The best result from mixing and combining RF, LR and GB predictions. \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/all_model_accuracy.png}
+\caption{barplot for all models accuracy}
+\label{fig:model_compare_bar}
+\end{figure}
+
+% ==============================
+So we can see, Gradient Boosting generalizes more stably. Because Gradient Boosting is optimized step by step by calculating gradients with respect to the features and gradually decreases the learning reate and finally tends towards a steady minimum of the log-loss with is crucial for classification work like ours.Hence, Gradient Boosting is selected as the main classical baseline model for our thesis.
+
+Following we will analize the performance of our best three models.
+
+
+
+
+
+\begin{table}[htbp]
+\centering
+\caption{Class-wise Performance of Random Forest Model}
+\label{tab:rf_classwise}
+\begin{tabular}{l c c c c}
+\hline
+\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+Finger Clipping & 0.70 & 0.47 & 0.56 & 15 \\
+Hand Flapping & 0.60 & 0.53 & 0.56 & 17 \\
+Head Touching & 0.94 & 1.00 & 0.97 & 15 \\
+Spinning & 0.88 & 1.00 & 0.94 & 15 \\
+Tilting & 0.78 & 0.93 & 0.85 & 15 \\
+Toe Walking & 0.94 & 1.00 & 0.97 & 15 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/random_forest_confusion_matrix.png}
+\caption{random forest confusion matrix}
+\label{fig:random_confusion}
+\end{figure}
+
+ As can be seen in Table~\ref{tab:rf_classwise}, head touching and toe walking both have high F1-scores of 0.97, while spinning also performs good with perfect recall. However, finger clipping had a lower recall of 0.47,might be indicating that some of the data points were misclassified. As can be seen in Fig.~\ref{fig:random_confusion}, which is the confusion matrix for the Random Forest classifier, most of the data points are correctly classified, lying on the diagonal, while there is little confusion between other hand movements which is desired.
+
+\begin{table}[htbp]
+\centering
+\caption{Class-wise Performance of Gradient Boosting Model}
+\label{tab:gb_classwise}
+\begin{tabular}{l c c c c}
+\hline
+\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+Finger Clipping & 0.55 & 0.40 & 0.46 & 15 \\
+Hand Flapping & 0.64 & 0.53 & 0.58 & 17 \\
+Head Touching & 0.83 & 1.00 & 0.91 & 15 \\
+Spinning & 1.00 & 1.00 & 1.00 & 15 \\
+Tilting & 0.78 & 0.93 & 0.85 & 15 \\
+Toe Walking & 0.94 & 1.00 & 0.97 & 15 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/gradient_boosting_confusion_matrix.png}
+\caption{gradient boosting confusion matrix}
+\label{fig:gradient_confusion}
+\end{figure}
+
+The Gradient Boosting model has demonstrated a steady performance across different classes. Based on Table \ref{tab:gb_classwise}, spinning was perfectly classified with outstanding precision and recall both at 1.00 . Toe walking and head touching have also well classified, as both achieved high F1-scores. Hand flapping and tilting were moderately classified by the model, while finger clipping was harder for the model to identify, with a recall value of 0.40. The confusion matrix presented in Fig. \ref{fig:gradient_confusion} indicates that the model's predictions are correct, except for a few cases of incorrect classification, which can be attributed to similarities in movement patterns of certain delicated behaviors.
+
+\begin{table}[htbp]
+\centering
+\caption{Class-wise Performance of Hard Voting Ensemble Model}
+\label{tab:hardvoting_classwise}
+\begin{tabular}{l c c c c}
+\hline
+\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+Finger Clipping & 0.55 & 0.40 & 0.46 & 15 \\
+Hand Flapping & 0.58 & 0.65 & 0.61 & 17 \\
+Head Touching & 0.88 & 1.00 & 0.94 & 15 \\
+Spinning & 1.00 & 1.00 & 1.00 & 15 \\
+Tilting & 0.87 & 0.87 & 0.87 & 15 \\
+Toe Walking & 1.00 & 1.00 & 1.00 & 15 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/hard_voting_confusion_matirx.png}
+\caption{hard voting confusion matrix}
+\label{fig:hard_confusion}
+\end{figure}
+
+Inputs from multiple classifiers were combined to improve stability and as shown in Table~\ref{tab:hardvoting_classwise}, the model has achieved perfect classification between spinning and toe walking, with head touching and tilting also achieving satisfactory results finally. Finger clipping, just like the other models, was found to be a bit difficult to classify well as it can be miss calculated with handflapping with normal human eye too and it is pretty much desired. Figure~\ref{fig:hard_confusion} shows that the majority of the data points are highly concentrated along the diagonal line, meaning that the data has been classified well, while a few misclassifications are scattered between data points that are visually almost similar even to naked eye.
+
+% ==============================
+\subsubsection{Deep Learning Models Performance Analysis}
+
+The accuracy of the BiLSTM model on the test set was found to be 0.62 and macro avg just over .6, which means a fair ability to identify the temporal motion patterns of each pose. Based on Table~\ref{tab:lstm_classwise}, it has done well on detecting head touching with an F1-score of 0.95 and spinning with a recall of 1.00. Moreover, toe walking was also well classified with an F1-score of 0.82. However, it was more hard for it to distinguish finger clipping and hand flapping since both hand movements are somewhat similar. Based on the confusion matrix presented in Fig.~\ref{fig:lstm_norm_cm}, it is seen that most of the predictions lie on the diagonal line and incorrect predictions occur in classes with somewhat same type hand movements which is very natural even to the naked eye. 
+
+For BiGRU, Table~\ref{tab:bigru_classwise} shows how well the BiGRU model did in each class with test accuracy of .68 and marcro avg scroe close to .68 of everything. The model had the highest recall for Spinning (0.95), which shows that it learned how to recognise patterns of repetitive temporal motion very well. Tilting had the highest accuracy (0.87), but Finger Clipping was still hard because finger-level movements are small and there wasn't a lot of training variety.
+
+For CNN BiLSTM, Table~\ref{tab:cnn_bilstm_classwise} shows how well the CNN-BiLSTM model did in each class with an test accuracy of 0.71 and macro avg highest score everything over .70 . The hybrid architecture had the best performance for Spinning, with precision, recall, and F1-score all at 0.95. This shows that it is good at capturing discriminative repetitive motion patterns. The model also did well on Tilting and Head Touching, but Hand Flapping was still pretty hard because the motions were similar and there weren't many different samples.
+
+\begin{table}[htbp]
+\centering
+\caption{Class-wise Performance of BiLSTM Model}
+\label{tab:lstm_classwise}
+\begin{tabular}{l c c c c}
+\hline
+\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+Finger Clipping & 0.43 & 0.30 & 0.35 & 10 \\
+Hand Flapping & 0.67 & 0.55 & 0.60 & 11 \\
+Head Touching & 0.91 & 1.00 & 0.95 & 10 \\
+Spinning & 0.77 & 1.00 & 0.87 & 10 \\
+Tilting & 0.67 & 0.60 & 0.63 & 10 \\
+Toe Walking & 0.75 & 0.90 & 0.82 & 10 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Class-wise Performance of BiGRU Model}
+\label{tab:bigru_classwise}
+\begin{tabular}{l c c c c}
+\hline
+\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+Finger Clipping & 0.67 & 0.50 & 0.57 & 20 \\
+Hand Flapping & 0.57 & 0.60 & 0.59 & 20 \\
+Head Touching & 0.70 & 0.70 & 0.70 & 20 \\
+Spinning & 0.66 & 0.95 & 0.78 & 20 \\
+Tilting & 0.87 & 0.65 & 0.74 & 20 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Class-wise Performance of CNN-BiLSTM Model}
+\label{tab:cnn_bilstm_classwise}
+\begin{tabular}{l c c c c}
+\hline
+\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+Finger Clipping & 0.46 & 0.65 & 0.54 & 20 \\
+Hand Flapping & 0.53 & 0.45 & 0.49 & 20 \\
+Head Touching & 0.82 & 0.70 & 0.76 & 20 \\
+Spinning & 0.95 & 0.95 & 0.95 & 20 \\
+Tilting & 0.89 & 0.80 & 0.84 & 20 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/lstm_norm_confusion.png}
+\caption{Normalized confusion matrix for the BiLSTM model.}
+\label{fig:lstm_norm_cm}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/bigru_confusion.png}
+\caption{confusion matrix for the BiGRU model.}
+\label{fig:bigru_lstm}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/cnnlstm_confusion.png}
+\caption{confusion matrix for the CNNLSTM model.}
+\label{fig:cnn_lstm}
+\end{figure}
+
+% ==============================
+\subsection{ROC AUC Analysis}
+In the following we try to discuss the ROC and AUC for both the tradional models like gradient boosting and random forest and finally the deep learning model which is bi-lstm.
+
+\subsubsection{Traditional Models ROC AUC Analysis}
+In Figure~\ref{fig:traditional_roc_auc}, we plot a macro-averaged ROC curve for top performing traditional classifiers, where each curve is a ROC--AUC curve for the six behavior classes of the dataset. The ROC curves for all three classifiers are well above the diagonal line, meaning the feature representation learned from the pose estimation model is effective in providing a strong class separating measure. Among the top performing traditional classifiers, the Random Forest classifier has the highest macro AUC value, which is 0.971 and its ROC curve is closest to the top left corner so its sensitivity is always high for a range of false positive rates. The Gradient Boosting classifier is a close second with a macro AUC value of 0.947 and its discriminability is slightly lower than that of the Random Forest classifier. The ROC curve for the Hard Voting classifier has a lower macro AUC value of 0.883 so the voting mechanism is not effective in providing a strong ranking based class separability measure and  the individual models in the voting mechanism may have different strengths in discriminating between classes indeed.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/traditional_roc_auc.png}
+\caption{ROC curves for the traditional best three models.}
+\label{fig:traditional_roc_auc}
+\end{figure}
+
+\subsubsection{Deep Learning Models ROC AUC Analysis}
+Figure~\ref{fig:cnn_bilstm_roc} shows the best deep learning models representation and how well the CNN-BiLSTM model does in the One-vs-Rest ROC test for all behaviour classes. The model was able to tell most classes apart very well. Spinning had the highest AUC of 0.99, followed by Tilting (0.96) and Head Touching (0.92). These results show that the hybrid architecture does a good job of capturing both local pose dynamics and temporal dependencies. The lower AUC for Finger Clipping (0.79) indicates that finer hand-based movements are still relatively more difficult to separate. This is mostly because of small changes in motion and a lack of training diversity.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/cnn_roc_auc.png}
+\caption{One-vs-Rest ROC curves for the CNNBiLSTM model.}
+\label{fig:cnn_bilstm_roc}
+\end{figure}
+
+
+
+% ==============================
+\subsection{Training Dynamics and Generalization}
+In the following we will try to describe the training dynamics and generalization perspective from both traditional model and deep learning models criterias and perspectives.
+\subsubsection{Traditional Model}
+Lets look and the graph works for the best two of our traditional models or Random forest and gradient boosting of our thesis then as we move forward we will describe them.
+
+Figure~\ref{fig:gb_loss}  shows the training and validation log loss over time as more estimators are added for the Gradient Boosting classifier. We can see that the training and validation log loss decrease quickly from around 50 to 150 estimators. So, its clear that the model is becoming better and better with the addition of more weak learners. We can also find that the minimum validation log loss occurs at n\_estimators=150. This is where the training and validation loss are almost identical, implying that the model is generalizing well on this small dataset which is very interesting. However, after this point, at n\_estimators=200, the training and validation loss start increasing again. This implies that the model is overfitting in this point. Therefore, the most stable point for the Gradient Boosting classifier is  n\_estimators=150.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/gb_loss.png}
+\caption{Training and validation log-loss curves for the Gradient Boosting model.}
+\label{fig:gb_loss}
+\end{figure}
+
+In figure \ref{fig:rf_loss}, we can see how the train and validation log loss changes with the number of trees in a Random Forest model. The curves are almost the same in all plots, and there is no significant rise in the test log loss so there is a very low probability of overfitting in this case. The log loss is declining slowly with the addition of more trees similar to the bagging theory where the decision boundary is not being altered by the addition of more estimators. The lowest log loss is observed at higher values of n\_estimators which is around 300 so the addition of more estimators in the model is always proving to benifit in terms of gaining a lower log loss and in a gradual manner.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/rf_loss.png}
+\caption{Training and validation log-loss curves for the Random Forest model.}
+\label{fig:rf_loss}
+\end{figure}
+
+\subsubsection{Deep Learning Model}
+
+Figure~\ref{fig:cnn_bilstm_val} displays the accuracy curves for training and validation of the CNN-BiLSTM model across several epochs for its the best deep learning model for us so far. The training accuracy goes up steadily and goes over 0.90, which shows that the model is able to learn useful spatial-temporal pose patterns from the input sequences. The validation accuracy also steadily goes up in the first few epochs before levelling off at around 0.70–0.78. This shows that the model can generalise well to new samples. In later epochs, there is a small gap between the training and validation curves. This suggests that mild overfitting is starting to happen, which is expected because the dataset is not very big. In general, the validation trend shows that the CNN-BiLSTM architecture is stable and reliable for learning to classify behaviours related to autism.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/cnn_bilstm_val.png}
+\caption{Training and validation accuracy curves for the CNNBiLSTM model.}
+\label{fig:cnn_bilstm_val}
+\end{figure}
+
+
+% ==============================
+\subsection{SHAP-based Explainability}
+
+Figure~\ref{fig:shap_rf} shows the SHAP-based feature for the upper body MediaPipe Pose features. The mean absolute SHAP value shows the global importance of the respective landmark coordinate or visibility features to the classifier's decidings. The importance ranking exlains that the detailed hand and wrist movement features contribute the most to the process of the classifier. The left wrist's vertical position LEFT\_WRIST\_y is the most important factor, followed by other finger movement features such as LEFT\_THUMB\_y, LEFT\_PINKY\_y, LEFT\_INDEX\_y, etc. The model also relies on the features of the right hand like wrist's vertical position RIGHT\_WRIST\_y and the respective features of the right hand's index finger, pinky finger and thumb, as the model differentiates the common actions of finger clipping and hand flapping by observing the bi lateral movement of the hands. Also, besides the movement of the hands parts, the model also relies on the movement of the hands proximal parts as well as the facial features such as the movement of the elbow and the presence of the eyes and nose which may relate to the stability of the postures of the upper body and the partial of the body parts and the upper body's orientation in the video frames respectively.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/shap_upper.png}
+\caption{SHAP-based importance of upper-body pose landmarks for the Random Forest model.}
+\label{fig:shap_rf}
+\end{figure}
+
+% ==============================
+\subsection{UI}
+
+A simple UI is made so that the user can upload their concerned childs video to the hompage and then upon the upload the probability of autistics behaviours is shown. There is a dedicated webpage where the user is guided on how to upload the video.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/ui1.jpeg}
+\caption{Hompage of our screening app}
+\label{fig:home}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{image/ui2.jpeg}
+\caption{App showing result after test video uploading}
+\label{fig:result}
+\end{figure}
+
+% ==============================
+\subsection{Key Findings and Discussions}
+
+The results show that pose features from short video clips can be very very much effective for classification of autism-related behaviors. The Gradient Boosting method provides a good classical baseline, which has been well tuned and CNN BiLSTM models provide a performance boost by capturing how things change over time when one frame is related to another. The more difficult cases involve behaviors differing by small hand movements which is in the need for more detailed motion modeling.
+
+
+
+% ==============================
+\section*{Chapter Summary}
+
+In the foregoing chapter, the development of a pose-based system for autism behavioral classification was tried to be covered. The classification of the behavioral patterns of autism was done by comparing the conventional machine learning techniques with the BiLSTM-based temporal models. The classification was done using different metrics. The results shows that Gradient Boosting can be used as a reliable baseline for it promising log-loss while test validating and the importance of temporal information, especially for short video clips, is also emphasized. The work shows that the non invasive autism behavior analysis is possible in a scalable manner.

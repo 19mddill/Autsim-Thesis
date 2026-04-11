@@ -1,0 +1,29 @@
+% ==============================
+% Chapter 6
+% ==============================
+
+\begin{center}
+    \section*{\fontsize{20}{20}\selectfont Chapter 6}
+\end{center}
+\vspace{10mm}
+
+\section{Conclusion}
+
+
+The present work demonstrates the effectiveness of combining pose estimation, strong baseline learning, temporal modeling and explainable AI in practice. The proposed framework is interpretable and flexible and makes it suitable for early stage of doing behavioral analysis with a autism child especially in environments where resources are limited.
+
+% ==============================
+\subsection{Limitations}
+
+However, there are a few limitations associated with these encouraging results. For instance, the number of samples is relatively small and the videos are of short duration. Such a constraint makes it difficult for deep learning models to exploit long term temporal relationships and it was sad. Moreover, distinguishing hand movements is a challenge when actions are puzzling to even the naked human eye or partially occluded and visually similar for different classes indeed. Also, variations in camera angle, lighting conditions, timing and pose estimation noises affect classification accuracy.
+
+ST-GCN (Spatial Temporal Graph Convolutional Network) and Optical Flow + MobileNetV2 couldn't perform well for having limited dataset just close to 300.
+
+% ==============================
+\subsection{Future Works and Direction}
+
+Future work could extend the data set to include a wider range of participants and a wider range of behavioral contexts increase how well the model generalizes. We could also consider using attention based temporal models and hybrid feature representations to better discriminate between subtle and overlapping behaviors.
+
+Summing up, it can be said that the study shows that a pose based machine learning framework, with a reliable classical baseline in the form of Gradient Boosting and a dynamic component via CNN BiLSTM provides a sound and understandable solution for classifying autism related behaviors especially considering that with a larger data set and tweaks to methods, it has a high potential for scaling up behavioral analysis and supportive tools while remaining a decision-support tool and not a diagnostic tool.
+
+% ==============================

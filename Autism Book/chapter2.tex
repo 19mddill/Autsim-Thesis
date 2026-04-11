@@ -1,0 +1,59 @@
+\begin{center}
+    \section*{\fontsize{20}{20}\selectfont Chapter 2}
+\end{center}
+\vspace{10mm}
+\section{Background Study}
+
+Autism Spectrum Disorder (ASD) is a neurodevelopmental disorder and it puts an affect to an children's ability to interact and communicate with others and also exhibits repetitive behaviors. Early detection of behaviors associated with autism is essential for successful intervention and developmental cure and support in the long run. Unfortunately, most current approaches in our country to diagnose autism are highly dependent on expert observation and manual behavioral analysis.
+
+With the rising of new technologies and methods in artificial intelligence, interested researchers and scientists in the respected field have been using machine learning and computer vision approaches for the detection of autistic patterns and analysis of the related behaviors. Researchers have been showing great interest in using pose estimation, video analysis for different repetitive action recognition and classification approaches for the analysis of behaviors objectively. This chapter presents a review of the existing literature related to the detection of autism, analysis of behaviors using pose estimation, and application of machine learning approaches for the analysis of these behaviors which are going to be used for the proposed system.
+
+
+\subsection{Literature Review}
+
+There are many research papers that have investigated the usage of machine learning and computer vision techniques for applications related to behavioral analysis. In the research paper by Rajpurkar et al. \cite{rajpurkar2022ai}, the authors discussed the increasing involvement of artificial intelligence with regard to medical decision support systems.
+
+Duda et al. \cite{duda2016use} studied the use of machine learning classifiers in screening autism using behavioral symptoms and promising results were gained in screening of ASD in its early stages. Another study by Thabtah \cite{thabtah2018machine} surveyed various machine learning approaches in diagnosing autism and identified some of the challenges in handling imbalanced datasets and feature selectings.
+
+Pose-based human action classification has also been greatly explored. Cao et al. \cite{cao2017realtime} proposed a real-time multi-person pose estimating framework that had a large effect on subsequent behavior analysis systems. Liu et al. \cite{liu2019skeleton} employed features arising from skeletal movements for different action recognition and also demonstrats that pose landmarks can be very useful for representing human motions.
+
+In the context of autism studies, Hashemi et al. \cite{hashemi2014computer} used computer vision to analyze the patterns in the facial and bodily movement of children having ASD. Voss et al. \cite{voss2019emotion} studied emotion recognition in children with autism by using video data, emphasizing on the role of temporal modeling.
+
+As for Deep learning techniques ,Ord\'{o}\~{n}ez et al. \cite{ordonez2016deep} have successfully utilized LSTM networks for activity recognition in respected time series data. More recently, Bi-directional LSTM networks have been utilized for learning long-term temporal dependencies from human behavior sequences \cite{zhao2020bidirectional}.
+
+Explainable artificial intelligence increases the trust and reliance in machine learning models. Lundberg and Lee \cite{lundberg2017unified} proposed SHAP to interpret the model predictions. The proposed method was then used in healthcare-related classification problems. Ribeiro et al. \cite{ribeiro2016should} highlighted the importance of model interpretability, especially in healthcare-related problems.
+
+In developing countries, automated systems are very important and feasible. Hossain et al. \cite{hossain2023smart} proposed a smart decision support system more fouced on the integration of machine learning for real-world applications. The above studies altogether is really worried about the importance of a pose-based and data-driven approach for autism behavior classification.
+
+
+\begin{table}[h]
+\centering
+\caption{Comparison of Related Works}
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Author (Year)} & \textbf{Data Type} & \textbf{Method} & \textbf{Limitation} \\ \hline
+Duda et al. (2016) \cite{duda2016use} & Behavioral data & ML classifiers & Limited features \\ \hline
+Thabtah (2018) \cite{thabtah2018machine} & Survey data & ML review & No video analysis \\ \hline
+Hashemi et al. (2014) \cite{hashemi2014computer} & Video & CV techniques & Small dataset \\ \hline
+Cao et al. (2017) \cite{cao2017realtime} & Video & Pose estimation & Not ASD-focused \\ \hline
+Liu et al. (2019) \cite{liu2019skeleton} & Skeleton data & Action recognition & General actions \\ \hline
+Ord\'{o}\~{n}ez et al. (2016) \cite{ordonez2016deep} & Time-series & LSTM & No pose data \\ \hline
+Zhao et al. (2020) \cite{zhao2020bidirectional} & Video & BiLSTM & High complexity \\ \hline
+Voss et al. (2019) \cite{voss2019emotion} & Video & Emotion recognition & Limited behaviors \\ \hline
+Lundberg et al. (2017) \cite{lundberg2017unified} & Tabular & Explainable AI & Not behavioral \\ \hline
+Ribeiro et al. (2016) \cite{ribeiro2016should} & ML models & Model explanation & No temporal data \\ \hline
+Rajpurkar et al. (2022) \cite{rajpurkar2022ai} & Healthcare data & AI systems & Conceptual \\ \hline
+Hossain et al. (2023) \cite{hossain2023smart} & IoT + ML & Decision systems & Not ASD-specific \\ \hline
+Sadman et al. (2023) \cite{sadman2023password} & Security data & ML framework & Different domain \\ \hline
+\end{tabular}
+\end{table}
+
+
+\subsection{Problem Analysis}
+
+so by reviewing the literature , it is clear that although there have been successful applications of machine learning and computer vision in field of healthcare and behavior analysis, there have been limitations in autism research. Most studies have been static in nature and have failed to fully account for temporal movement patterns. Video-based studies have been characterized by small databases, lack of generalization and poor interpretability.
+
+Moreover, the available methods hardly employ any the integration of pose-based feature extraction with machine learning explainability. The absence of such mechanisms in decision making further limits the usability of the methods in real-world applications. Such gaps have emphasized the need for developing an integrated system that is capable of analyzing temporal behavioral patterns while offering reliability in classification with interpretability.
+
+
+From the background study, it is clear that there is increasing interest in the use of machine learning and computer vision for the analysis of autism behavior. Even though there is already research on the feasibility of the approach, there have been also limitations in the approach due to issues such as temporal modeling, explainability and dataset limitations. This research aims to bridge that gap by introducing a new approach to autism behavior classification using a pose-based machine learning approaching.
