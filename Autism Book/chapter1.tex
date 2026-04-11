@@ -74,22 +74,19 @@ From the viewpoint of a technical standing, our study tries to make a contributi
 
 In summary, this study is important because it is trying to fill the gap between healthcare and technology in the developing coutries where it is very common. The results and approach of this study can be the pioneer for future research in the area of automated systems for screening autism and also provide a basis for further investigation into the use of artificial intelligence approaches for the analysis of neuro developmental disorders.
 \subsection{Research Contribution}
-Below are the Research Contributions:
+We tried to contribute to this research thinking about it very much down to earth and our contribution has beed standarized with the implemention. Below are the exact contributions that we tried to contribut to this research,
 \begin{itemize}
     \item This study proposes a holistic pose based video analysis system for autism related behavioral poses in children from raw video input to indentifying results.
     
     \item The MediaPipe Pose library is used for the extraction of human body landmarks from video footage data, thus giving the conversion of visual behavioral data into numerical data passed to machine learning for training.
     
-    \item A comparison of five traditional machine learning models such as Random Forest, Support Vector Machine, Logistic Regression, K-Nearest Neighbors, Gradient Boosting, and voting techniques is performed on the same dataset.
-    \item A Bi-Directional LSTM model is also implemented and compared with feature-based machine learning methods to model temporal dependencies in pose sequences.
+    \item We were able to collect dataset of autism affected child about their repetitive traits like hand flapping, finger clipping, head touching, spining and tilting via the one to four seconds long footages which holds great potential for research purpose.
+
+    \item We extracted sequences from this footages the train RNN base deep learning models to find interdepended frames of each traits to discover hidden relations among each traits.
     
-    \item Data augmentation methods such as temporal cropping, time warping, and horizontal flipping are used to handle class imbalance and enhance model robustness for  less footage pose data relative the others.
+    \item AI models were trained to recognised these behaviours of a autism child so that it can be later used for screening.
     
-    \item Model interpretability is improved using SHAP-based analysis to highlight key upper-body pose landmarks that heavily influence the predictions of the landmarks.
-    
-    \item The proposed system is validated by using stratified k-fold cross-validation, confusion matrices, ROC-AUC curves and validation curves to provide accurate performance evaluation.
-    
-    \item Prediction system is designed to validate the real-world usability of the proposed framework for autism behavior analysis in the suspected child.
+    \item Explainable AI analysis clearly shows the human body land marks pattern which leads the way to find key insights of these five traits
 \end{itemize}
 
 
