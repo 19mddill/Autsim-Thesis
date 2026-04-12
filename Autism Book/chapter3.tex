@@ -12,13 +12,13 @@ The proposed framework consists of some interconnected modules that process raw 
 
 Two parallel modeling methods have been used. For the first method, statistical features are extracted from the pose sequence data and classical machine learning models are then trained. For the second method, sequence-based deep learning models are trained directly on the pose sequence data to learn about temporal dependencies. Finally, the system has used multiple metrics to evaluate the models performance and provides the probabilities for each class in the predictions.
 
-Figure~\ref{fig:workflow} illustrates the overall workflow of the proposed framework.
+Figure~\ref{fig:detail_workflow} illustrates the overall workflow of the proposed framework.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[scale=0.25]{image/example_arch.png}
 \caption{Workflow of the Proposed Autism Behavior Detection Framework}
-\label{fig:workflow}
+\label{fig:detail_workflow}
 \end{figure}
 
 \subsection{Data Set Analysis}
@@ -55,7 +55,8 @@ head\_touching & Repeated head or face touching via hand \\
 
 \subsubsection{Data Collection and Preprocessing}
 
-The video data was collected using Android Mobile devices camera from a disabled children school located at Mirpur with appropriate ethical considerations and also by taking the consent from the respective parents and school authorities. Videos are resized and converted to RGB format before the extraction of the poses. MediaPipe Pose is used here for the project for the detection of body landmarks from the videos.
+The video data was collected using Samsung A1 Android Mobile
+devices camera from a disabled children school located at Mirpur coordinates in 23.933799633727386, 90.24442128295833 with appropriate with the consent of the school authority and the respected gurdian of the children and also by taking the consent from the respective parents and school authorities. Videos are resized and converted to RGB format before the extraction of the poses. MediaPipe Pose is used here for the project for the detection of body landmarks from the videos.
 
 Over 50 childen has been crucial for this thesis and their data has been very important. 
 
@@ -63,7 +64,7 @@ Over 50 childen has been crucial for this thesis and their data has been very im
 \centering
 \includegraphics[scale=0.25]{image/college.png}
 \caption{Sample Datset Image Demonstrating Poses}
-\label{fig:workflow}
+\label{fig:sample_image}
 \end{figure}
 
 \begin{figure*}[htbp]
@@ -102,7 +103,7 @@ Over 50 childen has been crucial for this thesis and their data has been very im
 \end{subfigure}
 
 \caption{Each images left sides have been blurred for insuring the chirldrens annonymity, whereas the right side shows the corresponding MediaPipe pose landmark extraction after the preprocessing.}
-\label{fig:preprocessing image beore and after}
+\label{fig:preprocessing_image_beore_and_after}
 \end{figure*}
 Due to the different length of the videos, sequence normalization is implemented to transform the data into fixed-size of sequences. For the videos with fewer frames then the other ones, the last pose frame is used for padding while for the longer ones, uniform sampling is performed for avoiding overfiting or underfiting issues later in training. 
 
