@@ -64,8 +64,10 @@ Over 50 childen has been crucial for this thesis and their data has been very im
 \centering
 \includegraphics[scale=0.25]{image/college.png}
 \caption{Sample Datset Image Demonstrating Poses}
-\label{fig:sample_image}
+\label{fig:sample_images_of_the_children}
 \end{figure}
+
+As shown in Figure~\ref{fig:sample_images_of_the_children} the back image of the four, the child is caught doing handflapping and finger cliping both and also in these four images children are doing finger cliping, head touching, tilting and also toe walking which are very much self explanatory.
 
 \begin{figure*}[htbp]
 \centering
@@ -102,9 +104,13 @@ Over 50 childen has been crucial for this thesis and their data has been very im
     \includegraphics[width=\linewidth]{image/preprocess6.png}
 \end{subfigure}
 
-\caption{Each images left sides have been blurred for insuring the chirldrens annonymity, whereas the right side shows the corresponding MediaPipe pose landmark extraction after the preprocessing.}
-\label{fig:preprocessing_image_beore_and_after}
+\caption{Before and after preprocessing}
+\label{fig:preprocessing_image_before_and_after}
 \end{figure*}
+
+
+As shown in Figure~\ref{fig:preprocessing_image_before_and_after} Each images left sides have been blurred for insuring the chirldrens annonymity, whereas the right side shows the corresponding MediaPipe pose landmark extraction after the preprocessing which is effectively mapping the human body landmarks with pose points and straight lines.
+
 Due to the different length of the videos, sequence normalization is implemented to transform the data into fixed-size of sequences. For the videos with fewer frames then the other ones, the last pose frame is used for padding while for the longer ones, uniform sampling is performed for avoiding overfiting or underfiting issues later in training. 
 
 In addtion and most importantly, data augmentation methods such as temporal cropping, time warping, and flipping are implemented in code to deal with the class imbalance problem.
@@ -127,6 +133,9 @@ Tilting           & 31 \\
 \end{tabular}
 \end{table}
 
+As shown in Table~\ref{tab:class_distribution}, our thesis dataset consists of this five behavior and body poses of autism affected child and children did hand flapping more often than anything so this kind of traits are the highest in our dataset. Also, some open source dataset was also included in this thesis to include all races of human. Also there is class imbalance so it was handled using augmentation to get a reliable prediction.
+
+
 
 
 \subsubsection{Feature Extraction and Selection}
@@ -135,39 +144,43 @@ For machine learning models which are feature based, statistical features are de
 
 And also upper-body landmarks have been selected for explanatory analysis, as many autism related behaviors have been greatly expressed by the hand, arm, and head movements specifically.
 
-\subsection{Algorithm/ Model Analysis}
+\subsection{Selected Algorithm Analysis}
 
 For the evaluation of the classification results, various machine learning algorithms are used in this research. Some classical machine learning algorithms used in the study are Random Forest, Support Vector Machine, Logistic Regression, K-Nearest Neighbors, and Gradient Boosting. The extracted statistical features are used for training these models. Ensemble methods are also used for classification with the help of soft voting and hard voting.
 
 In order to directly model the temporal patterns, a Bi-Directional Long Short-Term Memory (BiLSTM) model has been trained on the sequences of poses. This model has been found to be good for modeling short duration repetitive patterns in the videos. Early stopping and class weighting are also employed to avoid overfitting and class imbalance.
+
+Prior studies in the field is valued in our thesis and these alogorithms which are selected are also supported by this prior study. In these studies both classical machine learning and deep leaning approaches have been effectively explored. Such as in the study of \cite{thabtah2018machine} and \cite{duda2016use} they highlighted the effectiveness of traditional machine learning models and in the recent works like of \cite{perochon2023digital} showed the significance of behavioral data driven approaches for early autism detecting while screening.
+
+
 \subsubsection{Random Forest (RF)}
-The Random Forest algorithm is an ensemble-based learning algorithm and it uses multiple decision trees to make up the predictions. The algorithm uses bootstrap sampling and random feature selection to build multiple decision trees and combines their predictions to reduce variance and improve the generalization. In this research, Random Forest is used as baseline algorithm because of its incredible robustness to the noises and its ability to handle non linear decision boundaries in high dimensional feature spaces constructed from pose statistics. Although Random Forest is robust for handling sequential data, it does not actually consider temporal dependencies for short sequences.
+The Random Forest algorithm is an ensemble-based learning algorithm and it uses multiple decision trees to make up the predictions. The algorithm uses bootstrap sampling and random feature selection to build multiple decision trees and combines their predictions to reduce variance and improve the generalization. In this research, Random Forest is used as baseline algorithm because of its incredible robustness to the noises and its ability to handle non linear decision boundaries in high dimensional feature spaces constructed from pose statistics. Although Random Forest is robust for handling sequential data, it does not actually consider temporal dependencies for short sequences. This choice is supported by early researches where tree based and ensemble learning method have been used and applied in autism classfication tasks where they were able to handle the high dimentional behavioral data \cite{thabtah2018machine,duda2016use}.
 \subsubsection{Support Vector Machine (SVM)}
-On the other hand, Support Vector Machine is developed for finding the best separating hyperplane that can potentialy maximize the margin of separation. By the help of a kernel function, SVM can effectively handle non linear relationships between the features extracted for the poses. 
+On the other hand, Support Vector Machine is developed for finding the best separating hyperplane that can potentialy maximize the margin of separation. By the help of a kernel function, SVM can effectively handle non linear relationships between the features extracted for the poses. It is also an algorithm which was used in previous researches for generelization of high dimentinal spaces \cite{duda2016use}.
 \subsubsection{Logistic Regression (LR)}
-Logistic Regression is a Linear Probabilistic Classifier. It uses a logistic function to compute probabilities. Although it is a Linear Classifier, it is still a very good model and can also be used as a baseline model. In this research, it is also used to test whether the least complex models should be used for identifying ASD-related movement patterns.
+Logistic Regression is a Linear Probabilistic Classifier. It uses a logistic function to compute probabilities. Although it is a Linear Classifier, it is still a very good model and can also be used as a baseline model. In this research, it is also used to test whether the least complex models should be used for identifying ASD-related movement patterns. To evalute the need of more complex models, LR has often been used as a baseline in classification problems.\cite{thabtah2018machine}.
 
 \subsubsection{K-Nearest Neighbors (KNN)}
-The classifier used is the 'K-Nearest Neighbor' classifier, which is a non-parametric classifier, i.e., it is not dependent on any parameters. It is also called the 'instance-based learner' too, where the classification is done by the voting system of the local neighbors. It is proved to perform good when local patterns are present in the data set. In the present work, the 'KNN classifier' is used to detect the appearing of unique possible local clusters related to ASD behavioral characteristics.
+The classifier used is the 'K-Nearest Neighbor' classifier, which is a non-parametric classifier, i.e., it is not dependent on any parameters. It is also called the 'instance-based learner' too, where the classification is done by the voting system of the local neighbors. It is proved to perform good when local patterns are present in the data set. In the present work, the 'KNN classifier' is used to detect the appearing of unique possible local clusters related to ASD behavioral characteristics. For the possiblity of discovering local patterns which can play an important role in classification, KNN has been used as intansce based learning approach \cite{duda2016use}.
 
 \subsubsection{Gradient Boosting (GB)}
-Gradient Boosting is a form of Ensemble Learning and it involves a series of weak models such as decision trees that are used to correct errors made by models that are used before it. The optimization process is carried out by minimizing a differentiable function such as the logarithmic function for classification problems using a gradient descent method with respect to different features.
+Gradient Boosting is a form of Ensemble Learning and it involves a series of weak models such as decision trees that are used to correct errors made by models that are used before it. The optimization process is carried out by minimizing a differentiable function such as the logarithmic function for classification problems using a gradient descent method with respect to different features. GB has ability to reduce classification errors and optimize loss function iteratively thus it can show strong performance in autism related behavioral classification prediction problems \cite{hossain2023smart}.
 
 Gradient Boosting is selected as one of the most important baseline algorithms for our study because of its good bias-variance tradeoff and its ability to achieve a global minimum of the log loss function with validation curves. Unlike the RF algorithm, which reduces the variance of the model by parallel tree generation, the GB algorithm always improves the performance of the model step by step by focusing on samples that are really hard to classify. Thus, it is really useful for small sized datasets used for our study, like the short video-based ASD dataset, and it is a saviour.
 
 In addition, the validation performance of the Gradient Boosting model remains close to the training performance, which shows good generalization and hence less overfitting probability. Thus,this makes it more logical to choose the Gradient Boosting model instead the Random Forest model as the primary classical model.
 
 \subsubsection{Ensemble Voting Methods}
-Additionally, in order to enhance the robustness, both soft voting and hard voting ensemble methods are implemented in the code, in which various classical classifiers are combined(high accuracy models). The former is combining of probabilities of classes, whereas in the latter, classes are presented by majority voting. These ensemble methods are useful in overcoming biases of each classifier and making more stable predictions of behavioral classes.
+Additionally, in order to enhance the robustness, both soft voting and hard voting ensemble methods are implemented in the code, in which various classical classifiers are combined(high accuracy models). The former is combining of probabilities of classes, whereas in the latter, classes are presented by majority voting. These ensemble methods are useful in overcoming biases of each classifier and making more stable predictions of behavioral classes. To reduce individual model biases and make robust prediction ensemble voting strategy has been also used \cite{rajpurkar2022ai}.\cite{ordonez2016deep} and \cite{zhao2020bidirectional}, these prior works has shown the effectiveness of BiLSTM for sequential data modeling where to recognize human body landmark traits, deep recurrent architectures have shown real effective performance.
 
 \subsubsection{Bi-Directional Long Short-Term Memory (BiLSTM)}
 To identify temporal dependency in a more explicit way, a Bi-Directional Long Short-Term Memory network is learned on a fixed-length sequence of poses extracted from the those video clips.And after that this model learns the short-term temporal patterns associated with the repetitive tendency of ASD behaviors. Early stopping is utilized to avoid overfitting cases, while class weighting is used to counterbalance class imbalancings. This BiLSTM model provides a deep learning counterpart to traditional methods and shows a comparison with feature-based learning.
 
 \subsubsection{BiGRU}
-The BiGRU model was presented as a lightweight recurrent deep learning architecture designed to capture bidirectional temporal dependencies from the 30-frame pose landmark sequences. BiGRU is more efficient than BiLSTM because it uses fewer gating operations. It also keeps the long-range motion dynamics in autism-related repetitive behaviour clips.
+The BiGRU model was presented as a lightweight recurrent deep learning architecture designed to capture bidirectional temporal dependencies from the 30-frame pose landmark sequences. BiGRU is more efficient than BiLSTM because it uses fewer gating operations. It also keeps the long-range motion dynamics in autism-related repetitive behaviour clips.Recurrence-based models like GRU are also implemented as working replacements for LSTM in sequence modeling applications and it also ensures comparable results \cite{ordonez2016deep}.
 
 \subsubsection{CNN-BiLSTM}
-The CNN-BiLSTM model learns both short-term and long-term patterns of motion by combining one-dimensional convolutional layers with bidirectional LSTM layers. The convolutional layers first take short-term frame-level behavioural features from pose sequences. Then, these features are sent to the BiLSTM layers so that the whole clip can be understood in terms of sequential behaviour.
+The CNN-BiLSTM model learns both short-term and long-term patterns of motion by combining one-dimensional convolutional layers with bidirectional LSTM layers. The convolutional layers first take short-term frame-level behavioural features from pose sequences. Then, these features are sent to the BiLSTM layers so that the whole clip can be understood in terms of sequential behaviour.A hybrid approach mixing CNN and LSTM models has proven effective for activity recognition tasks by capturing both spatial and temporal attributes of sequential data \cite{ordonez2016deep}.
 
 \subsection{Explanation of Different Modules}
 These components include video preprocessing, pose extraction, sequence normalization, feature extraction, training, evaluation, and prediction. All these components operate independently of each other but as a whole they contribute to the entire process. This is a unique feature of the system that makes it flexible and allows room for further improvement, like adding more behaviors or models.
