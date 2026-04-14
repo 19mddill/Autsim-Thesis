@@ -43,8 +43,10 @@ To use classic machine learning classifiers, we have transformed each pose seque
 \centering
 \includegraphics[width=0.8\textwidth]{image/data_preprocessing.png}
 \caption{Data Preprocessing Steps}
-\label{fig:Data Preprocessing}
+\label{fig:Data_Preprocessing}
 \end{figure}
+
+In the Figure \ref{fig:Data_Preprocessing}, we show the step and stage involved with preprocessing video data. At first, we get the frames from the videos. Then, we use the MediaPipe Pose model to get 33 body keypoints per frame (x, y, visibility), thus having 99 features per frame. Because of the fact that videos differ in length, we try make sure that all videos have 30 frames by either padding or reducing the number of frames.Also, to make sure that our neural networks generalize well, we use some techniques such as sequence cropping, time warping and horizontal flips. Consequenctly, we form two different kinds of datasets: raw pose sequences for deep learning analysis and statistical features for classical ML models.
 
 % ==============================
 \subsection{Feature Relationships}
