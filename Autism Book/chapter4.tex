@@ -59,7 +59,7 @@ In the Figure \ref{fig:Data_Preprocessing}, we show the step and stage involved 
 \end{figure}
 
 
-In the Figure \ref{fig:corr_upper}, upper body landmark of skeletal frames correlation has been tried to show as a heatmap. The heatmap clearly is dark or darked red where only trademak body landmarks statistical features is highly correlated to other. For example from the heatmap we can clearly see with the right_wrist, right thumb is heavily correlated by dark red which may indicated a certain correlation with hand flapping and finger clipping and onwards.
+In the Figure \ref{fig:corr_upper}, upper body landmark of skeletal frames correlation has been tried to show as a heatmap. The heatmap clearly is dark or darked red where only trademak body landmarks statistical features is highly correlated to other. For example from the heatmap we can clearly see with the right wrist, right thumb is heavily correlated by dark red which may indicated a certain correlation with hand flapping and finger clipping and onwards.
 
 % ==============================
 \subsection{Model Implementation}
@@ -92,72 +92,63 @@ We have evaluated our project from two perspectives. The first one is from the v
 
 \subsubsection{Traditional Models Performance Analysis}
 
-In the conventional models, we first implemented a five-fold cross-validation to assess the performance of the pose-based feature representation.
+In the conventional models, we first implemented a five-fold cross-validation to assess the performance of the pose-based feature representation so that the statistical features can be extracted.
 
-The table below compares classical machine learning models using five-fold cross-validation. The table is showing the model, the mean accuracy and a remark about the model respectively.
+The plotting below compares the testing accuracies of our traditional models used in this thesis from 5 fold validation and 70\% training, 15\% testing and 15\% validation perspective.
 
 \begin{table}[htbp]
 \centering
-\caption{Comparison of Classical Machine Learning Models using five fold cross validation}
-\label{tab:model comparison}
-\begin{tabular}{l c l}
+\caption{Model Performance Comparison}
+\label{tab:model_comparison_after_split}
+\begin{tabular}{l c c c}
 \hline
-\textbf{Model} & \textbf{Mean Accuracy} & \textbf{Remarks} \\
+\textbf{Model} & \textbf{Validation Acc} & \textbf{Test Acc} & \textbf{Log Loss} \\
 \hline
-SVM (RBF) & 0.4868 & Poor fitting for pose-derived statistical features.\\
-KNN & 0.6777 & greatly sensitive to feature scaling and local distance patterns \\
-Logistic Regression & 0.7993 &Works as a linear decision boundary baseline. \\
-Soft Voting Ensemble & 0.8027 & Combines predictions from multiple classifiers by using probabilities. \\
-Random Forest & 0.8522 & Excellent ensemble model and uses decision trees. \\
-Gradient Boosting & 0.8587 & Sequentially boosts a weak learner. \\
-Hard Voting Ensemble & 0.8620 & The best result from mixing and combining RF, LR and GB predictions. \\
+Random Forest & 0.8762 & 0.8952 & 0.4341 \\
+SVM & 0.4667 & 0.5143 & 1.2620 \\
+Logistic Regression & 0.7524 & 0.7905 & 1.2118 \\
+KNN & 0.5810 & 0.6286 & 3.9598 \\
+Gradient Boosting & 0.8571 & 0.8667 & 0.5189 \\
+Soft Voting & 0.8190 & 0.8286 & 0.4726 \\
+Hard Voting & 0.8762 & 0.8952 & N/A \\
 \hline
 \end{tabular}
 \end{table}
 
+From this table \ref{tab:model_comparison_after_split} and from the figure \ref{fig:split_trad} it is cleary evident that the winner in terms of accuracy is the Random Forest Classifier and Hard Voting both having 89.5\% test accuracy. However, the problem with these models is that they are more overfitted compared to the Gradient Boosting model since their validation accuracies are 2 percentage points lower than their testing accuracies. In the case of the Gradient Boosting Classifier, there is virtually no difference between its validation and test accuracy, which is 85.7\% and 86.7\%, respectively, and its log loss is constant at 0.5189. This suggests that the model has been trained to make consistent probability predictions. As for the Random Forest Classifier, its test accuracy is higher by 1.9 percentage points than its validation accuracy, but the difference is not significant.
+
+
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/all_model_accuracy.png}
-\caption{barplot for all models accuracy}
-\label{fig:model_compare_bar}
+\includegraphics[width=0.8\textwidth]{image/5_fold_trad.png}
+\caption{Classical Model Accuracy after 5 fold validation with Ensembel Method}
+\label{fig:5_fold_trad}
 \end{figure}
-
-% ==============================
-So we can see, Gradient Boosting generalizes more stably. Because Gradient Boosting is optimized step by step by calculating gradients with respect to the features and gradually decreases the learning reate and finally tends towards a steady minimum of the log-loss with is crucial for classification work like ours.Hence, Gradient Boosting is selected as the main classical baseline model for our thesis.
-
-Following we will analize the performance of our best three models.
-
-
-
-
-
-\begin{table}[htbp]
-\centering
-\caption{Class-wise Performance of Random Forest Model}
-\label{tab:rf_classwise}
-\begin{tabular}{l c c c c}
-\hline
-\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
-\hline
-Finger Clipping & 0.70 & 0.47 & 0.56 & 15 \\
-Hand Flapping & 0.60 & 0.53 & 0.56 & 17 \\
-Head Touching & 0.94 & 1.00 & 0.97 & 15 \\
-Spinning & 0.88 & 1.00 & 0.94 & 15 \\
-Tilting & 0.78 & 0.93 & 0.85 & 15 \\
-Toe Walking & 0.94 & 1.00 & 0.97 & 15 \\
-\hline
-\end{tabular}
-\end{table}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/random_forest_confusion_matrix.png}
-\caption{random forest confusion matrix}
-\label{fig:random_confusion}
+\includegraphics[width=0.8\textwidth]{image/split_trad.png}
+\caption{Classical Model Accuracy after 70\% training, 15\% testing and 15\% validating with Ensembel Method}
+\label{fig:split_trad}
 \end{figure}
 
- As can be seen in Table~\ref{tab:rf_classwise}, head touching and toe walking both have high F1-scores of 0.97, while spinning also performs good with perfect recall. However, finger clipping had a lower recall of 0.47,might be indicating that some of the data points were misclassified. As can be seen in Fig.~\ref{fig:random_confusion}, which is the confusion matrix for the Random Forest classifier, most of the data points are correctly classified, lying on the diagonal, while there is little confusion between other hand movements which is desired.
+So this figure \ref{fig:5_fold_trad} is the 5-fold cross-validation accuracy, sorted from worst to best. SVM is at the bottom again barely 48\% which is basically useless. KNN follows at 69\%, still weak. After that Logistic Regression at 86.3\% which is very decent but it is also nothing special but mean time worth it. Gradient Boosting and Soft Voting tie at 89.4\% — solid and consistent. But the real stars are Hard Voting at 92.4\% and Random Forest at 92.6\%, sitting at the top and almost identical. What matter in here is that in cross-val, there's no overfitting trick — every fold is unseen. So Random Forest and Hard Voting genuinely generalize well across different splits. Gradient Boosting still looks stable, but it's now 3\% behind the leaders. So the bottom line is that Random Forest and Hard Voting are your safest bets if the reliability is wanted across different data cuts.
+
+Hardvoting Ensemble was done here combining Random forest and Gradient Boosting and to break the tie Random forest was given the upper vote. SoftVoting was initiated by predictions from three classifers random forest, gradient boosting and logistic regression as the average performer. Random forest always performed exellent as it uses decision trees and Gradient boosting followed side by side as it sequentially boosts the weak learner. Logistic Regression worked as a polynomial decision boundry baseline and the bad performing SVM fitted the pose derived statistical features poorly. KNN got sensitive to feature scaling and local patterns of distances so it performed bad.
+
+Looking at both the train/test split and the 5-fold cross-validation, Random Forest and Hard Voting consistently lead — hitting 89.5\% on test and 92.6\% in CV, with minimal overfitting signs. Gradient Boosting is the most stable: its test accuracy (86.7\%) almost matches CV (89.4\%), and its low, steady log loss (0.52) proves excellent calibration. In contrast, SVM fails everywhere (51\% test, 48\% CV), while KNN struggles with wild log loss (3.96). So if you want pure accuracy, pick Random Forest or Hard Voting. But if you need reliable probabilities and generalization, Gradient Boosting is the safer, more honest choice.
+
+
+As we can also see, Gradient Boosting generalizes more stably later in the figure \ref{fig:rf_vs_gb_loss}, so it is sane that we chose Graident Boosting as our baseline model for our thesis.Gradient Boosting is optimized step by step by calculating gradients with respect to the features and gradually decreases the learning reate and finally tends towards a steady minimum of the log-loss with is crucial for classification work like ours.Hence, Gradient Boosting is selected as the main classical baseline model for our thesis although it has less accuracy than Random forest as a traditional model which works for statical features of our dataset.
+
+Following we will analize the classification performance of Gradient Boosting.
+
+
+\paragraph{Classification Report} : 
+
+From Table~\ref{tab:gb_classwise},What actually stands out is that the model absolutely loves Spinning — it catches every single one (recall of 1.00). Tilting and Head Touching are also solid, especially Head Touching — when it says it's head touching, it's right 94\% of the time. But then there's Hand Flapping. That's the problem child. Recall sits at just 0.76, meaning the model misses nearly a quarter of actual hand flapping episodes. If you're tracking this behavior closely, that's a real issue. Because finger clipping and hand flapping can be very hard to differentiate even from the naked human eye.Finger Clipping sits right in the middle — nothing amazing, nothing terrible. Everything balanced at 0.81.
+So the bottom line here is that the model works great for spinning and tilting, but don't trust it blindly for hand flapping. Overall accuracy (0.87) sounds nice.
 
 \begin{table}[htbp]
 \centering
@@ -167,15 +158,24 @@ Toe Walking & 0.94 & 1.00 & 0.97 & 15 \\
 \hline
 \textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
 \hline
-Finger Clipping & 0.55 & 0.40 & 0.46 & 15 \\
-Hand Flapping & 0.64 & 0.53 & 0.58 & 17 \\
-Head Touching & 0.83 & 1.00 & 0.91 & 15 \\
-Spinning & 1.00 & 1.00 & 1.00 & 15 \\
-Tilting & 0.78 & 0.93 & 0.85 & 15 \\
-Toe Walking & 0.94 & 1.00 & 0.97 & 15 \\
+Finger Clipping & 0.81 & 0.81 & 0.81 & 21 \\
+Hand Flapping & 0.84 & 0.76 & 0.80 & 21 \\
+Head Touching & 0.94 & 0.81 & 0.87 & 21 \\
+Spinning & 0.84 & 1.00 & 0.91 & 21 \\
+Tilting & 0.91 & 0.95 & 0.93 & 21 \\
+\hline
+\multicolumn{4}{r}{\textbf{Accuracy}} & 0.87 \\
+\multicolumn{4}{r}{\textbf{Macro Avg}} & 0.86 \\
+\multicolumn{4}{r}{\textbf{Weighted Avg}} & 0.86 \\
 \hline
 \end{tabular}
 \end{table}
+
+\paragraph{Confusion Matrix for Gradient Boosting} :
+
+Looking at the confusion matrix in the figure \ref{fig:gradient_confusion} for Gradient Boosting, the story from Table~\ref{tab:gb_classwise} plays out clearly. Spinning and Tilting are nearly flawless — only 1 miss each, and those are just confused with each other. That's fine.
+
+Head Touching gets 17 right, but messes up 3 times: 1 called finger clipping, 1 hand flapping, 1 spinning. Not terrible. Finger clipping gets 17 correct, but slips into hand flapping twice and head touching twice — some confusion but manageable. Because finger cliping and hand flapping are hard to differentiate even to the human eye. Then there's Hand Flapping. Only 16 correct out of 21. It gets mislabeled as finger clipping (3 times) and head touching (once). So the bottom line here is that the matrix confirms the model is great for spinning/tilting, shaky for hand flapping which is explainable.
 
 \begin{figure}[htbp]
 \centering
@@ -184,175 +184,211 @@ Toe Walking & 0.94 & 1.00 & 0.97 & 15 \\
 \label{fig:gradient_confusion}
 \end{figure}
 
-The Gradient Boosting model has demonstrated a steady performance across different classes. Based on Table \ref{tab:gb_classwise}, spinning was perfectly classified with outstanding precision and recall both at 1.00 . Toe walking and head touching have also well classified, as both achieved high F1-scores. Hand flapping and tilting were moderately classified by the model, while finger clipping was harder for the model to identify, with a recall value of 0.40. The confusion matrix presented in Fig. \ref{fig:gradient_confusion} indicates that the model's predictions are correct, except for a few cases of incorrect classification, which can be attributed to similarities in movement patterns of certain delicated behaviors.
 
-\begin{table}[htbp]
-\centering
-\caption{Class-wise Performance of Hard Voting Ensemble Model}
-\label{tab:hardvoting_classwise}
-\begin{tabular}{l c c c c}
-\hline
-\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
-\hline
-Finger Clipping & 0.55 & 0.40 & 0.46 & 15 \\
-Hand Flapping & 0.58 & 0.65 & 0.61 & 17 \\
-Head Touching & 0.88 & 1.00 & 0.94 & 15 \\
-Spinning & 1.00 & 1.00 & 1.00 & 15 \\
-Tilting & 0.87 & 0.87 & 0.87 & 15 \\
-Toe Walking & 1.00 & 1.00 & 1.00 & 15 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{image/hard_voting_confusion_matirx.png}
-\caption{hard voting confusion matrix}
-\label{fig:hard_confusion}
-\end{figure}
-
-Inputs from multiple classifiers were combined to improve stability and as shown in Table~\ref{tab:hardvoting_classwise}, the model has achieved perfect classification between spinning and toe walking, with head touching and tilting also achieving satisfactory results finally. Finger clipping, just like the other models, was found to be a bit difficult to classify well as it can be miss calculated with handflapping with normal human eye too and it is pretty much desired. Figure~\ref{fig:hard_confusion} shows that the majority of the data points are highly concentrated along the diagonal line, meaning that the data has been classified well, while a few misclassifications are scattered between data points that are visually almost similar even to naked eye.
 
 % ==============================
 \subsubsection{Deep Learning Models Performance Analysis}
 
-The accuracy of the BiLSTM model on the test set was found to be 0.62 and macro avg just over .6, which means a fair ability to identify the temporal motion patterns of each pose. Based on Table~\ref{tab:lstm_classwise}, it has done well on detecting head touching with an F1-score of 0.95 and spinning with a recall of 1.00. Moreover, toe walking was also well classified with an F1-score of 0.82. However, it was more hard for it to distinguish finger clipping and hand flapping since both hand movements are somewhat similar. Based on the confusion matrix presented in Fig.~\ref{fig:lstm_norm_cm}, it is seen that most of the predictions lie on the diagonal line and incorrect predictions occur in classes with somewhat same type hand movements which is very natural even to the naked eye. 
 
-For BiGRU, Table~\ref{tab:bigru_classwise} shows how well the BiGRU model did in each class with test accuracy of .68 and marcro avg scroe close to .68 of everything. The model had the highest recall for Spinning (0.95), which shows that it learned how to recognise patterns of repetitive temporal motion very well. Tilting had the highest accuracy (0.87), but Finger Clipping was still hard because finger-level movements are small and there wasn't a lot of training variety.
-
-For CNN BiLSTM, Table~\ref{tab:cnn_bilstm_classwise} shows how well the CNN-BiLSTM model did in each class with an test accuracy of 0.71 and macro avg highest score everything over .70 . The hybrid architecture had the best performance for Spinning, with precision, recall, and F1-score all at 0.95. This shows that it is good at capturing discriminative repetitive motion patterns. The model also did well on Tilting and Head Touching, but Hand Flapping was still pretty hard because the motions were similar and there weren't many different samples.
+We had to implement the Deep Learning Models to exploit the temporal dependencies of frame to frame of pose sequences to evalute our work whether its generating the acutal results. Following are the detailed representations.
 
 \begin{table}[htbp]
 \centering
-\caption{Class-wise Performance of BiLSTM Model}
-\label{tab:lstm_classwise}
-\begin{tabular}{l c c c c}
+\caption{Final Comparison of Deep Learning Models (using 5-Fold Cross Validation)}
+\label{tab:dl_model_comparison_5_fold}
+\begin{tabular}{l c c c}
 \hline
-\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\textbf{Model} & \textbf{Mean Accuracy} & \textbf{Std Dev} & \textbf{Mean Loss} \\
 \hline
-Finger Clipping & 0.43 & 0.30 & 0.35 & 10 \\
-Hand Flapping & 0.67 & 0.55 & 0.60 & 11 \\
-Head Touching & 0.91 & 1.00 & 0.95 & 10 \\
-Spinning & 0.77 & 1.00 & 0.87 & 10 \\
-Tilting & 0.67 & 0.60 & 0.63 & 10 \\
-Toe Walking & 0.75 & 0.90 & 0.82 & 10 \\
+BiLSTM & 0.7971 $\pm$ 0.0567 & 0.0567 & 0.5917 \\
+BiGRU & 0.8343 $\pm$ 0.0330 & 0.0330 & 0.5192 \\
+CNN-BiLSTM & 0.8100 $\pm$ 0.0469 & 0.0469 & 0.6225 \\
 \hline
 \end{tabular}
 \end{table}
 
+From Table~\ref{tab:dl_model_comparison_5_fold}, BiGRU  hits the highest mean accuracy (83.4\%) and the lowest loss (0.52), which tells you it's making confident, correct predictions. But here's what really matters: look at that standard deviation. BiGRU's is 0.033, the smallest of the three. That means it's not just good — it's consistent across all five folds. No wild swings.
+
+CNN-BiLSTM sits in the middle on accuracy (81.0\%), but its loss is the highest (0.6225) — meaning when it's wrong, it's confidently wrong. But later seen in the validation log loss plotting \ref{fig:rf_vs_gb_loss} its generalization is reliable.
+
+BiLSTM comes at 79.7\%, but the standard deviation is much larger (0.0567). So it's more hit or miss. Some folds it does okay, others it struggles. That's risky if reliability is needed.
+
+
+
 \begin{table}[htbp]
 \centering
-\caption{Class-wise Performance of BiGRU Model}
-\label{tab:bigru_classwise}
-\begin{tabular}{l c c c c}
+\caption{Final Summary of All Models using 70\% training, 15\% testing and 15\% validating}
+\label{tab:final_summary_split}
+\begin{tabular}{l c c c}
 \hline
-\textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\textbf{Model} & \textbf{Best Val Acc} & \textbf{Final Val Acc} & \textbf{Test Acc} \\
 \hline
-Finger Clipping & 0.67 & 0.50 & 0.57 & 20 \\
-Hand Flapping & 0.57 & 0.60 & 0.59 & 20 \\
-Head Touching & 0.70 & 0.70 & 0.70 & 20 \\
-Spinning & 0.66 & 0.95 & 0.78 & 20 \\
-Tilting & 0.87 & 0.65 & 0.74 & 20 \\
+BiLSTM & 0.8381 & 0.8095 & 0.8000 \\
+BiGRU & 0.8286 & 0.7619 & 0.7714 \\
+CNN-BiLSTM & 0.8667 & 0.8667 & 0.8476 \\
 \hline
 \end{tabular}
 \end{table}
 
+Table~\ref{tab:final_summary_split} tells a different story than the cross-validation one. Lets look at CNN-BiLSTM first  it's the star here. Best validation accuracy hits 86.7\%, and here's the real thing that final validation is exactly the same (86.7\%). No drop. No overfitting. Test accuracy is 84.8\%, slightly lower but still solid. That's a model you can trust.
+
+Now BiGRU? That's worrying. Best validation was 82.9\%, but final validation crashes to 76.2\%. That's a 6.7\% drop. Then test is 77.1\%. Something went wrong — maybe early stopping cut too early, or the validation split was unlucky. Either way, it's unstable.
+
+BiLSTM sits in the middle. Best val 83.8\%, final val 81.0\%, test exactly 80.0\%. Small, steady drops. Not flashy, but reliable.
+
+CNN-BiLSTM wins this round. It keeps its promise from best to final to test. BiGRU looks shaky despite its CV performance.
+
+
+Hence, CNN-BiLSTM has been chosen as our base line deep learning model and following are its classification reports and confusion matrix.
+
+\paragraph{Classification Report of CNN-BiLSTM} : 
+From Table~\ref{tab:test_classification_report}, CNN-BiLSTM does really well on three behaviors and stumbles on two. Head Touching and Spinning are nearly perfect — both hit 0.95 precision or recall, with F1-scores of 0.95 and 0.93. The model clearly knows what these look like.
+
+Tilting is interesting. Recall is 0.95 — it catches almost all tilting episodes. But precision is only 0.77, meaning when it says tilting, it's wrong nearly a quarter of the time. So it's over-predicting this behavior.
+
+Finger Clipping is solid across the board — 0.82, 0.86, 0.84. Nothing flashy, but dependable.
+
+Then there's Hand Flapping. Recall is just 0.57 — the model misses 43\% of actual hand flapping. F1-score drops to 0.65, the lowest by far. Same problem we saw with Gradient Boosting earlier. This behavior is just harder to distinguish with finger cliping even to naked eye of a human.
+
 \begin{table}[htbp]
 \centering
-\caption{Class-wise Performance of CNN-BiLSTM Model}
-\label{tab:cnn_bilstm_classwise}
+\caption{Test Classification Report - CNN-BiLSTM Model}
+\label{tab:test_classification_report}
 \begin{tabular}{l c c c c}
 \hline
 \textbf{Behavior} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
 \hline
-Finger Clipping & 0.46 & 0.65 & 0.54 & 20 \\
-Hand Flapping & 0.53 & 0.45 & 0.49 & 20 \\
-Head Touching & 0.82 & 0.70 & 0.76 & 20 \\
-Spinning & 0.95 & 0.95 & 0.95 & 20 \\
-Tilting & 0.89 & 0.80 & 0.84 & 20 \\
+Finger Clipping & 0.82 & 0.86 & 0.84 & 21 \\
+Hand Flapping & 0.75 & 0.57 & 0.65 & 21 \\
+Head Touching & 0.95 & 0.95 & 0.95 & 21 \\
+Spinning & 0.95 & 0.90 & 0.93 & 21 \\
+Tilting & 0.77 & 0.95 & 0.85 & 21 \\
+\hline
+\multicolumn{4}{r}{\textbf{Accuracy}} & 0.85 \\
+\multicolumn{4}{r}{\textbf{Macro Avg}} & 0.84 \\
+\multicolumn{4}{r}{\textbf{Weighted Avg}} & 0.84 \\
 \hline
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{image/lstm_norm_confusion.png}
-\caption{Normalized confusion matrix for the BiLSTM model.}
-\label{fig:lstm_norm_cm}
-\end{figure}
+\paragraph{Confusion Matrix for CNN-BiLSTM} :
+Looking at the confusion matrix \ref{fig:confusion_cnn} CNN-BiLSTM, the classification report's story comes to life. Head Touching and Spining are almost flawless. Head Touching gets 20 out of 21 right — only one mistake, and that's just calling it finger clipping. Spining gets 19 correct, with just two slipping into tilting. That's clean.
+
+Finger Clipping does well too: 18 correct, only three misses (two to hand flapping, one to head touching). Solid.
+
+Tilting is interesting. It gets all 21 actual tilting episodes right but the row for actual tilting shows 0,0,1,0,20 — so 20 correct, one called head touching. That's actually 20 out of 21, so recall 0.95, matches the report. But precision was only 0.77 — and you can see why. Look at the tilting column. It has false alarms from hand flapping (1), spining (2), and maybe others. So the model calls tilting too often, even when it's wrong.
+
+Then Hand Flapping. Actual hand flapping row: 3 correct but it shows 3, 12, 0, 1, 5. That means only 12 out of 21 actual hand flapping were caught. The rest got scattered everywhere — 3 called finger clipping, 1 called spining, 5 called tilting. Its because hand flapping is so common and affected child can do hand flapping while spining.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/bigru_confusion.png}
-\caption{confusion matrix for the BiGRU model.}
-\label{fig:bigru_lstm}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{image/cnnlstm_confusion.png}
-\caption{confusion matrix for the CNNLSTM model.}
-\label{fig:cnn_lstm}
+\includegraphics[width=0.8\textwidth]{image/confusion_cnn.png}
+\caption{CNN-BiLSTM confusion matrix}
+\label{fig:confusion_cnn}
 \end{figure}
 
 % ==============================
 \subsection{ROC AUC Analysis}
-In the following we try to discuss the ROC and AUC for both the tradional models like gradient boosting and random forest and finally the deep learning model which is bi-lstm.
+In the following we try to discuss the ROC and AUC for both the tradional models like gradient boosting  and finally the deep learning model which is CNN-BiLSTM.
 
 \subsubsection{Traditional Models ROC AUC Analysis}
-In Figure~\ref{fig:traditional_roc_auc}, we plot a macro-averaged ROC curve for top performing traditional classifiers, where each curve is a ROC--AUC curve for the six behavior classes of the dataset. The ROC curves for all three classifiers are well above the diagonal line, meaning the feature representation learned from the pose estimation model is effective in providing a strong class separating measure. Among the top performing traditional classifiers, the Random Forest classifier has the highest macro AUC value, which is 0.971 and its ROC curve is closest to the top left corner so its sensitivity is always high for a range of false positive rates. The Gradient Boosting classifier is a close second with a macro AUC value of 0.947 and its discriminability is slightly lower than that of the Random Forest classifier. The ROC curve for the Hard Voting classifier has a lower macro AUC value of 0.883 so the voting mechanism is not effective in providing a strong ranking based class separability measure and  the individual models in the voting mechanism may have different strengths in discriminating between classes indeed.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/traditional_roc_auc.png}
-\caption{ROC curves for the traditional best three models.}
-\label{fig:traditional_roc_auc}
+\includegraphics[width=0.8\textwidth]{image/grad_fold_roc_auc.png}
+\caption{ROC AUC curve for Gradient Boosting}
+\label{fig:grad_fold_roc_auc}
 \end{figure}
 
+Looking at Figure~\ref{fig:grad_fold_roc_auc}, the AUC scores are honestly stunning. Four out of five behaviors hit AUC above 0.96, and three of those — head touching, spining, and tilting — are nearly perfect at 0.998 or 0.999. That means the model is almost flawless at distinguishing these behaviors from everything else. No confusion.
+
+Finger clipping is at 0.965, still excellent. Hand flapping is the lowest at 0.961, which sounds fine until you compare it to the others. Even then, 0.961 is still very strong.
+
+Here's what the curves show visually. Look at head touching and spining — the lines shoot straight up to nearly 1.0 recall at almost zero false positives. That's ideal. Hand flapping and finger clipping take a little longer to climb, meaning they need slightly more false positives to catch all the true ones.
+
+But here's the real insight: the random line sits at 0.5. Every single behavior is miles above that. So despite the classification report showing hand flapping recall at only 0.76, the AUC tells a different story — the model actually ranks hand flapping very well. It just might be setting the probability threshold too high. Probably lowering the threshold for hand flapping and catch more true positives without destroying precision too much.
+
+So bottom line is Gradient Boosting is exceptional at separating all five behaviors. Hand flapping is the weakest, but weak for this model is still 0.96 AUC — which most models would kill for.
+
 \subsubsection{Deep Learning Models ROC AUC Analysis}
-Figure~\ref{fig:cnn_bilstm_roc} shows the best deep learning models representation and how well the CNN-BiLSTM model does in the One-vs-Rest ROC test for all behaviour classes. The model was able to tell most classes apart very well. Spinning had the highest AUC of 0.99, followed by Tilting (0.96) and Head Touching (0.92). These results show that the hybrid architecture does a good job of capturing both local pose dynamics and temporal dependencies. The lower AUC for Finger Clipping (0.79) indicates that finer hand-based movements are still relatively more difficult to separate. This is mostly because of small changes in motion and a lack of training diversity.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/cnn_roc_auc.png}
-\caption{One-vs-Rest ROC curves for the CNNBiLSTM model.}
-\label{fig:cnn_bilstm_roc}
+\includegraphics[width=0.8\textwidth]{image/roc_auc_cnn_fold.png}
+\caption{ROC AUC curves for the CNNBiLSTM model}
+\label{fig:roc_auc_cnn_fold}
 \end{figure}
+
+Looking at Figure~\ref{fig:roc_auc_cnn_fold}, the story is different from Gradient Boosting. Spining leads the pack with an AUC of 0.994 — nearly perfect. Head touching follows at 0.980, still excellent. Tilting is solid at 0.963.
+
+But then there's a drop. Finger clipping comes in at 0.909, which is decent but not great. And hand flapping is the lowest at 0.897 — the only one below 0.9.
+
+Here's what the curves actually show. Compare this to Gradient Boosting's curves. For CNN-BiLSTM, the lines climb much more gradually. At a false positive rate of 0.2, finger clipping and hand flapping are only catching about 65-66\% of true positives. Gradient Boosting was already above 95\% at that point.
+
+The gap between the best (spining at 0.994) and worst (hand flapping at 0.897) is about 0.097. That's noticeable. The model clearly struggles more with hand flapping and finger clipping than with the others. As often affected children do fingercliping and hand flapping side by side simultenuously.
+
+
 
 
 
 % ==============================
 \subsection{Training Dynamics and Generalization}
-In the following we will try to describe the training dynamics and generalization perspective from both traditional model and deep learning models criterias and perspectives.
+In the following we will try to describe the training dynamics and generalization perspective from both of our best traditional models and deep learning models criterias and perspectives.
 \subsubsection{Traditional Model}
-Lets look and the graph works for the best two of our traditional models or Random forest and gradient boosting of our thesis then as we move forward we will describe them.
 
-Figure~\ref{fig:gb_loss}  shows the training and validation log loss over time as more estimators are added for the Gradient Boosting classifier. We can see that the training and validation log loss decrease quickly from around 50 to 150 estimators. So, its clear that the model is becoming better and better with the addition of more weak learners. We can also find that the minimum validation log loss occurs at n\_estimators=150. This is where the training and validation loss are almost identical, implying that the model is generalizing well on this small dataset which is very interesting. However, after this point, at n\_estimators=200, the training and validation loss start increasing again. This implies that the model is overfitting in this point. Therefore, the most stable point for the Gradient Boosting classifier is  n\_estimators=150.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/gb_loss.png}
-\caption{Training and validation log-loss curves for the Gradient Boosting model.}
-\label{fig:gb_loss}
+\includegraphics[width=0.8\textwidth]{image/grad_log_loss_split.png}
+\caption{log loss analysis of gradient boosting}
+\label{fig:grad_log_loss_split}
 \end{figure}
 
-In figure \ref{fig:rf_loss}, we can see how the train and validation log loss changes with the number of trees in a Random Forest model. The curves are almost the same in all plots, and there is no significant rise in the test log loss so there is a very low probability of overfitting in this case. The log loss is declining slowly with the addition of more trees similar to the bagging theory where the decision boundary is not being altered by the addition of more estimators. The lowest log loss is observed at higher values of n\_estimators which is around 300 so the addition of more estimators in the model is always proving to benifit in terms of gaining a lower log loss and in a gradual manner.
+Looking at Figure~\ref{fig:grad_log_loss_split}, here's what the log loss tells us. Training loss keeps dropping nicely as we add more trees — from 1.15 at 10 estimators all the way down to 0.01 at 1000 estimators. That's the model learning the training data inside out.
+
+But validation loss tells the real story. It drops fast at first — from 1.25 at 10 estimators to 0.55 at 100 estimators. Then it keeps improving slowly to 0.32 at 500 estimators. But here's the key moment: at 1000 estimators, validation loss actually ticks up slightly to 0.33. That's the first sign of overfitting.
+
+The best validation loss happens at 500 estimators with 0.32. The curve marks n=400 as the best, which is close enough.
+
+Here's the insight: the model stops improving much after 200 estimators. Going from 200 to 500 only drops validation loss from 0.45 to 0.32 — a 0.13 improvement. But training loss keeps plummeting. That gap starts widening after 500 estimators. So if being safe from overfitting, somewhere between 400 and 500 estimators is the sweet spot. Beyond that, its memorizing the training set for very little gain.
+
+
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/rf_loss.png}
-\caption{Training and validation log-loss curves for the Random Forest model.}
-\label{fig:rf_loss}
+\includegraphics[width=0.8\textwidth]{image/rf_vs_gb_loss.png}
+\caption{plot is showing gb has lower and steady log loss in comparison with random forest which although have higher accuracy.}
+\label{fig:rf_vs_gb_loss}
 \end{figure}
+
+From Figure~\ref{fig:rf_vs_gb_loss}, here's the secret. Random Forest validation loss starts at 0.78 and barely improves — after 1000 estimators it's still at 0.48. It flatlines early. That means its probability estimates are stuck. It never learns to be confident or well-calibrated.
+
+Gradient Boosting, on the other hand, starts terrible (1.25) but keeps dropping all the way to 0.35. It actually learns from its mistakes.
+
+So why does Random Forest still get good accuracy? Because accuracy only cares about which class wins, not how sure the model is. Random Forest gets the winner right often, but its confidence scores are garbage. Gradient Boosting gets both the winner and the probability right. That's why GB is the better model for real-world use.
 
 \subsubsection{Deep Learning Model}
 
-Figure~\ref{fig:cnn_bilstm_val} displays the accuracy curves for training and validation of the CNN-BiLSTM model across several epochs for its the best deep learning model for us so far. The training accuracy goes up steadily and goes over 0.90, which shows that the model is able to learn useful spatial-temporal pose patterns from the input sequences. The validation accuracy also steadily goes up in the first few epochs before levelling off at around 0.70–0.78. This shows that the model can generalise well to new samples. In later epochs, there is a small gap between the training and validation curves. This suggests that mild overfitting is starting to happen, which is expected because the dataset is not very big. In general, the validation trend shows that the CNN-BiLSTM architecture is stable and reliable for learning to classify behaviours related to autism.
+
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{image/cnn_bilstm_val.png}
-\caption{Training and validation accuracy curves for the CNNBiLSTM model.}
-\label{fig:cnn_bilstm_val}
+\includegraphics[width=0.8\textwidth]{image/cnn_log_loss_fold.png}
+\caption{Training and validation accuracy curves and log loss plotting for the CNNBiLSTM model.}
+\label{fig:cnn_log_loss_fold}
 \end{figure}
+
+From Figure~\ref{fig:cnn_log_loss_fold}, let's walk through what's actually happening.
+
+Lets look at the loss curves. Training loss starts at 0.33 in epoch 1 and starts drops smoothly to 0.88 by epoch 14. Validation loss starts from even lower at 0.26 and ends at 0.86. It is clearly noticable how they move in lockstep — the gap between them never exceeds 0.03 at any point. That's the clearest sign of no overfitting. If the model were memorizing, training loss would keep falling while validation loss flattened or rose. That never happens here.
+
+Now the accuracy curves. Both training and validation accuracy start at 0.25  and climb together to 0.85 by epoch 14. Again, they're almost identical the whole journey. At epoch 8, both are around 0.72. At epoch 11, both around 0.80. No divergence at all.
+
+Here's what else stands out. The improvements are consistent. Each epoch gives a steady gain — no wild jumps or flat periods. That suggests the learning rate and architecture are well-matched to the data.
+
+One more thing: at epoch 14, both curves are still trending upward. Training accuracy is 0.87, validation is 0.85. They haven't plateaued yet. So the model could likely benefit from more epochs — maybe 20 or 25. The fact that validation hasn't started to dip tells there's still room to grow.
+
+CNN-BiLSTM is beautifully behaved. It learns exactly what it should, doesn't cheat by memorizing, and gives you honest probability estimates. If you had to pick a model based on learning curves alone, this one is as trustworthy as they come.
 
 
 % ==============================
@@ -368,9 +404,12 @@ Figure~\ref{fig:shap_rf} shows the SHAP-based feature for the upper body MediaPi
 \end{figure}
 
 % ==============================
-\subsection{UI}
+\subsection{APP}
 
 A simple UI is made so that the user can upload their concerned childs video to the hompage and then upon the upload the probability of autistics behaviours is shown. There is a dedicated webpage where the user is guided on how to upload the video.
+
+
+Frontend was developed using React.js framework. Backend is made with flask. Best model is dumped as *.pkl in the backend to generate prediction.
 
 \begin{figure}[htbp]
 \centering
@@ -379,6 +418,8 @@ A simple UI is made so that the user can upload their concerned childs video to 
 \label{fig:home}
 \end{figure}
 
+In the figure \ref{fig:home}, this is a interface where user can upload centain videos of their child is suspected by clicking the upload button.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{image/ui2.jpeg}
@@ -386,10 +427,21 @@ A simple UI is made so that the user can upload their concerned childs video to 
 \label{fig:result}
 \end{figure}
 
+Then In the figure \ref{fig:result}, this is the result shown where certain five trait possibility is shown and verdicts a final statement whether the screening from professional is needed or not.
+
 % ==============================
 \subsection{Key Findings and Discussions}
 
-The results show that pose features from short video clips can be very very much effective for classification of autism-related behaviors. The Gradient Boosting method provides a good classical baseline, which has been well tuned and CNN BiLSTM models provide a performance boost by capturing how things change over time when one frame is related to another. The more difficult cases involve behaviors differing by small hand movements which is in the need for more detailed motion modeling.
+
+Finger clipping and hand flapping are the hardest to distinguish not because the models are weak, but because these two behaviors are naturally similar in children with autism. They often occur together, look alike in motion patterns, and share similar acceleration and rhythm signatures. No model can fully untangle what's inherently tangled.
+
+Even so, Gradient Boosting and CNN-BiLSTM both prove capable. Gradient Boosting hits 0.96+ AUC for all five behaviors, and CNN-BiLSTM stays above 0.89. For spinning, tilting, and head touching, both models are nearly flawless.
+
+Here's what this means practically. For a new suspected child, you don't need to rely on subjective observation alone. These models take statistical features from motion data — like acceleration peaks, rhythm consistency, and duration patterns — and add temporal dependency through architectures like BiLSTM and GRU. As a result we get an automated, objective evaluation of five core autism-related behaviors.
+
+But we can not ignore the limitation. Because finger clipping and hand flapping are behaviorally related, confusion between them will persist. A clinician should still look closely when the model flags one but not the other — that's where real insight lives.
+
+In the path forward, combining both models. Use Gradient Boosting for well-calibrated probability scores and CNN-BiLSTM for capturing temporal sequences. Together, they cover each other's weaknesses. For hand flapping specifically, lower the decision threshold — the AUC shows the model ranks it well, it just needs a nudge.
 
 
 
